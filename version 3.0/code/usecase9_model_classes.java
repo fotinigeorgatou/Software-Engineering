@@ -9,12 +9,8 @@ class VetClinic {
     private String name, address, phone, doctor, mapLink, distance;
 
     public VetClinic(String name, String address, String phone, String doctor, String mapLink, String distance) {
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.doctor = doctor;
-        this.mapLink = mapLink;
-        this.distance = distance;
+        this.name = name; this.address = address; this.phone = phone;
+        this.doctor = doctor; this.mapLink = mapLink; this.distance = distance;
     }
 
     public String getName()     { return name; }
@@ -41,28 +37,38 @@ class ApprovalRequest {
 
     private VetClinic selectedClinic;
     private Status status;
+    private String ownerCounterProposal;
 
     public ApprovalRequest(VetClinic clinic) {
         this.selectedClinic = clinic;
         this.status = Status.PENDING;
     }
 
-    public VetClinic getSelectedClinic() { return selectedClinic; }
-    public Status getStatus()            { return status; }
-    public void approve()                { this.status = Status.APPROVED; }
-    public void reject()                 { this.status = Status.REJECTED; }
+    public VetClinic getSelectedClinic()        { return selectedClinic; }
+    public Status getStatus()                    { return status; }
+    public String getOwnerCounterProposal()      { return ownerCounterProposal; }
+    public void approve()                        { this.status = Status.APPROVED; }
+    public void reject(String counterProposal)   { this.status = Status.REJECTED; this.ownerCounterProposal = counterProposal; }
 }
 
 class EmergencyEvent {
+    public enum EventStatus { ACTIVE, RESOLVED, FALSE_ALARM }
+
     private String category;
     private String comment;
     private List<String> emergencyLog;
+    private EventStatus status;
+    private LocalDateTime startTime;
 
-    public EmergencyEvent() { this.emergencyLog = new ArrayList<>(); }
+    public EmergencyEvent() {
+        this.emergencyLog = new ArrayList<>();
+        this.status = EventStatus.ACTIVE;
+    }
 
     public void startEvent(String category, String comment) {
         this.category = category;
-        this.comment = comment;
+        this.comment  = comment;
+        this.startTime = LocalDateTime.now();
         addLogEntry("ΕΝΑΡΞΗ ΣΥΜΒΑΝΤΟΣ: Κατηγορία '" + category + "' — Σχόλιο: " + comment);
     }
 
@@ -73,5 +79,19 @@ class EmergencyEvent {
         System.out.println(log);
     }
 
+    public void resolve() {
+        this.status = EventStatus.RESOLVED;
+        addLogEntry("ΛΗΞΗ ΣΥΝΑΓΕΡΜΟΥ — Το συμβάν επιλύθηκε.");
+    }
+
+    public void markFalseAlarm() {
+        this.status = EventStatus.FALSE_ALARM;
+        // Καμία καταγραφή στο emergency log (βάσει use case)
+        System.out.println("[FALSE ALARM] Ακύρωση από Host — χωρίς καταγραφή.");
+    }
+
     public List<String> getEmergencyLog() { return emergencyLog; }
+    public EventStatus getStatus()         { return status; }
+    public String getCategory()            { return category; }
+    public LocalDateTime getStartTime()    { return startTime; }
 }
