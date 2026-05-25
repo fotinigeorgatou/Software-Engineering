@@ -1,23 +1,18 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.geom.RoundRectangle2D;
+import java.io.File;
 
 public class choicelogin extends JFrame {
     private String userEmail;
 
     private static final Color BG_DARK = new Color(26, 26, 26);
     private static final Color CARD_WHITE = new Color(249, 250, 243);
-    private static final Color INPUT_GRAY = new Color(223, 223, 223);
     private static final Color PINK = new Color(255, 60, 91);
-    private static final Color PLACEHOLDER_COLOR = new Color(150, 150, 150);
     private static final Color PURPLE = new Color(193, 163, 229);
 
-
     public choicelogin(String email) {
-
         this.userEmail = email;
         setTitle("petbnb");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -49,36 +44,58 @@ public class choicelogin extends JFrame {
 
             // 2. Title
             JLabel title = new JLabel("Welcome to petbnb!", SwingConstants.CENTER);
-            title.setFont(new Font("Blinker", Font.BOLD, 22));
+            title.setFont(new Font("SansSerif", Font.BOLD, 22));
             gbc.gridy = 1;
             gbc.insets = new Insets(10, 0, 5, 0);
             add(title, gbc);
 
             // 3. Subtitle
             JLabel subtitle = new JLabel("Continue as:", SwingConstants.CENTER);
-            subtitle.setFont(new Font("Blinker", Font.BOLD, 18));
+            subtitle.setFont(new Font("SansSerif", Font.PLAIN, 18));
             gbc.gridy = 2;
             gbc.insets = new Insets(0, 0, 30, 0);
             add(subtitle, gbc);
 
             // 4. Buttons
-// ΑΛΛΑΓΗ 1: Μικραίνουμε τα insets αριστερά/δεξιά (5) για να πλατύνουν
-            gbc.insets = new Insets(10, 5, 10, 5);
+            // --- Pet Owner Button (Αυτόνομη Ροή 1) ---
+            gbc.gridy = 3;
+            gbc.insets = new Insets(0, 0, 15, 0);
+            JButton ownerBtn = new RoundedButton("Pet Owner");
+            ownerBtn.addActionListener(e -> {
+                choicelogin.this.dispose();
+                // isDualRole = false, incomingFromDual = false
+                new PetOwnerRegistration(userEmail, false, false).setVisible(true);
+            });
+            add(ownerBtn, gbc);
 
-            // ΑΛΛΑΓΗ 2: Μειώνουμε το εσωτερικό ύψος (ipady)
-            gbc.ipady = 8;
-
-            // Pet Owner Button
+            // --- Host Button (Αυτόνομη Ροή 2) ---
             gbc.gridy = 4;
-            add(new RoundedButton("Pet Owner"), gbc);
+            gbc.insets = new Insets(0, 0, 15, 0);
+            JButton hostBtn = new RoundedButton("Host");
+            hostBtn.addActionListener(e -> {
+                choicelogin.this.dispose();
+                // isDualFlow = false (Αυτόνομος Host)
+                new HostRegistration(userEmail, false).setVisible(true);
+            });
+            add(hostBtn, gbc);
 
-            // Host Button
+            // --- Dual Button (Συνδυαστική Ροή 3) ---
             gbc.gridy = 5;
-            add(new RoundedButton("Host"), gbc);
+            gbc.insets = new Insets(0, 0, 0, 0);
+            JButton dualBtn = new RoundedButton("Dual Profile");
+            dualBtn.addActionListener(e -> {
+                choicelogin.this.dispose();
 
-            // Dual Button
-            gbc.gridy = 6;
-            add(new RoundedButton("Dual"), gbc);
+                // Βήμα 1.2: Ενημέρωση συστήματος για την έναρξη της διπλής ροής
+                JOptionPane.showMessageDialog(this,
+                        "Επιλέξατε Διπλό Ρόλο (Owner & Host)!\nΗ διαδικασία ξεκινά με την καταχώρηση του κατοικιδίου σας.",
+                        "petbnb", JOptionPane.INFORMATION_MESSAGE);
+
+                // Κλήση της PetOwnerRegistration με flags για Dual
+                // ώστε να γνωρίζει να καλέσει αυτόματα τη HostRegistration μετά!
+                new PetOwnerRegistration(userEmail, true, true).setVisible(true);
+            });
+            add(dualBtn, gbc);
         }
 
         @Override
@@ -86,21 +103,19 @@ public class choicelogin extends JFrame {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(CARD_WHITE);
-            // Increased arc for the card itself (the white background)
             g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), 30, 30));
             g2.dispose();
         }
     }
 
-    //  CUSTOM BUTTON CLASS
-
+    // --- CUSTOM BUTTON CLASS ---
     class RoundedButton extends JButton {
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
             setBorderPainted(false);
             setFocusPainted(false);
-            setForeground(PURPLE);
+            setForeground(Color.WHITE); // Λευκά γράμματα για να κάνουν αντίθεση με το PINK φόντο
             setFont(new Font("SansSerif", Font.BOLD, 16));
             setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
@@ -108,14 +123,9 @@ public class choicelogin extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
-            // Ενεργοποίηση εξομάλυνσης για τέλειες καμπύλες
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // Χρώμα κουμπιού
             g2.setColor(PINK);
-
-            // Το μυστικό είναι εδώ: Χρησιμοποιούμε το getHeight() για τις γωνίες
-            // ώστε να γίνει τελείως ημικυκλικό στις άκρες (pill shape)
             int arc = getHeight();
             g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arc, arc));
 
@@ -124,8 +134,7 @@ public class choicelogin extends JFrame {
         }
     }
 
-    //  LOGO PANEL
-
+    // --- LOGO PANEL ---
     class LogoPanel extends JPanel {
         private Image logoImage;
 
@@ -168,6 +177,7 @@ public class choicelogin extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new choicelogin("test@test.com").setVisible(true);        });
+            new choicelogin("test@test.com").setVisible(true);
+        });
     }
 }
