@@ -9,19 +9,16 @@ import java.util.ArrayList;
 public class HostRegistration extends JFrame {
 
     private String userEmail;
-    private boolean isDualFlow; // Μεταβλητή ελέγχου για τη διπλή ροή
+    private boolean isDualFlow;
 
-    // Λίστα για την αποθήκευση πολλαπλών καταλυμάτων (Βήμα 1.9)
     private ArrayList<String> accommodationsList = new ArrayList<>();
 
-    // --- Color Palette ---
     private static final Color BG_DARK = new Color(26, 26, 26);
     private static final Color CARD_WHITE = new Color(249, 250, 243);
     private static final Color INPUT_GRAY = new Color(223, 223, 223);
     private static final Color PINK = new Color(255, 60, 91);
     private static final Color PURPLE = new Color(193, 163, 229);
 
-    // Φόρμα Στοιχείων Host (Components)
     private JComboBox<String> cbPropertyType;
     private JCheckBox chkFencedYard;
 
@@ -38,7 +35,6 @@ public class HostRegistration extends JFrame {
     private JCheckBox chkDailyWalk, chkTransportation, chkBathGrooming;
     private JLabel lblHouseImgPath;
 
-    // ΔΙΟΡΘΩΜΕΝΟΣ CONSTRUCTOR: Δέχεται και το flag για τη διπλή ροή
     public HostRegistration(String email, boolean isDualFlow) {
         this.userEmail = email;
         this.isDualFlow = isDualFlow;
@@ -48,7 +44,6 @@ public class HostRegistration extends JFrame {
         setSize(500, 800);
         setLocationRelativeTo(null);
 
-        // Κεντρικό Panel με ScrollPane λόγω μεγέθους φόρμας
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_DARK);
 
@@ -73,7 +68,7 @@ public class HostRegistration extends JFrame {
 
         // 1.4 Δυνατότητα Φιλοξενίας
         JPanel p2 = createSectionPanel("1.4 Δυνατότητα Φιλοξενίας");
-        p2.add(new JLabel("Δεχόμενα είδη ζώων:"));
+        p2.add(new JLabel("Δεχόμενα είδη ζώων (*):"));
         chkDogs = new JCheckBox("Σκύλοι");
         chkCats = new JCheckBox("Γάτες");
         chkBirds = new JCheckBox("Πουλιά");
@@ -112,16 +107,8 @@ public class HostRegistration extends JFrame {
         p5.add(chkDailyWalk); p5.add(chkTransportation); p5.add(chkBathGrooming);
         contentPanel.add(p5);
 
-        // 1.8 Οπτικό Υλικό Χώρου
-        JPanel p6 = createSectionPanel("1.8 Φωτογραφίες Χώρου Φιλοξενίας");
-        JButton btnUploadHouse = new RoundedButton("Μεταφόρτωση Φωτογραφιών Χώρου");
-        lblHouseImgPath = new JLabel("Δεν επιλέχθηκαν αρχεία");
-        btnUploadHouse.addActionListener(e -> chooseFile(lblHouseImgPath));
-        p6.add(btnUploadHouse);
-        p6.add(lblHouseImgPath);
-        contentPanel.add(p6);
 
-        // Κουμπιά Διαχείρισης Ροής (1.9 & 1.10)
+        // Κουμπιά Διαχείρισης Ροής
         JPanel ActionPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         ActionPanel.setBackground(CARD_WHITE);
         ActionPanel.setBorder(new EmptyBorder(15, 0, 0, 0));
@@ -144,7 +131,6 @@ public class HostRegistration extends JFrame {
         add(mainPanel);
     }
 
-    // --- Helper Methods Σχεδίασης ---
     private JPanel createSectionPanel(String title) {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
@@ -162,7 +148,7 @@ public class HostRegistration extends JFrame {
         tf.setMaximumSize(new Dimension(420, 30));
         panel.add(lbl);
         panel.add(tf);
-        panel.add(Box.createVerticalStrut(5));
+        panel.add(Box.createVerticalStrut(5)); // <--- Διορθώθηκε σε createVerticalStrut
         return tf;
     }
 
@@ -172,7 +158,7 @@ public class HostRegistration extends JFrame {
         cb.setMaximumSize(new Dimension(420, 30));
         panel.add(lbl);
         panel.add(cb);
-        panel.add(Box.createVerticalStrut(5));
+        panel.add(Box.createVerticalStrut(5)); // <--- Διορθώθηκε σε createVerticalStrut
         return cb;
     }
 
@@ -184,13 +170,13 @@ public class HostRegistration extends JFrame {
         sp.setMaximumSize(new Dimension(420, 50));
         panel.add(lbl);
         panel.add(sp);
-        panel.add(Box.createVerticalStrut(5));
+        panel.add(Box.createVerticalStrut(5)); // <--- Διορθώθηκε σε createVerticalStrut
         return ta;
     }
 
     private void chooseFile(JLabel label) {
         JFileChooser chooser = new JFileChooser();
-        chooser.setMultiSelectionEnabled(true); // Επιτρέπει πολλές φωτογραφίες χώρου
+        chooser.setMultiSelectionEnabled(true);
         int ret = chooser.showOpenDialog(this);
         if (ret == JFileChooser.APPROVE_OPTION) {
             File[] files = chooser.getSelectedFiles();
@@ -200,81 +186,82 @@ public class HostRegistration extends JFrame {
         }
     }
 
-    // --- Βήμα 1.9: Προσθήκη Επιπλέον Καταλύματος (Επιστροφή στο 1.3) ---
     private void handleAddMoreAccommodation() {
-        String currentSelection = cbPropertyType.getSelectedItem().toString() +
-                (chkFencedYard.isSelected() ? " (Με περιφραγμένη αυλή)" : " (Χωρίς αυλή)");
-
+        // Κωδικοποιούμε τις πληροφορίες του σπιτιού χρησιμοποιώντας '#' για εύκολο split μετά
+        String currentSelection = cbPropertyType.getSelectedItem().toString();
         accommodationsList.add(currentSelection);
 
-        // Καθαρισμός των πεδίων του καταλύματος για την επόμενη καταχώρηση
         cbPropertyType.setSelectedIndex(0);
         chkFencedYard.setSelected(false);
         lblHouseImgPath.setText("Δεν επιλέχθηκαν αρχεία");
 
-        JOptionPane.showMessageDialog(this, "Το 1ο κατάλυμα αποθηκεύτηκε! Τώρα μπορείτε να εισάγετε τα στοιχεία για το 2ο κατάλυμα.");
+        JOptionPane.showMessageDialog(this, "Το κατάλυμα αποθηκεύτηκε στη λίστα! Τώρα μπορείτε να εισάγετε τα στοιχεία για το επόμενο κατάλυμα.");
     }
 
-    // --- ΔΙΟΡΘΩΜΕΝΟ Βήμα 1.10 & 1.12: Προεπισκόπηση, Κανόνες Ασφαλείας & Ύστερη Ερώτηση Ροής ---
     private void handleHostFinalization() {
-        // Έλεγχος αν έχει επιλεχθεί τουλάχιστον ένα είδος ζώου προς φιλοξενία
         if (!chkDogs.isSelected() && !chkCats.isSelected() && !chkBirds.isSelected() && !chkOtherPets.isSelected()) {
-            JOptionPane.showMessageDialog(this, "Παρακαλώ επιλέξτε τουλάχιστον ένα είδος ζώου που μπορείτε να φιλοξενήσετε.");
+            JOptionPane.showMessageDialog(this, "Μήνυμα Error: Παρακαλώ επιλέξτε τουλάχιστον ένα είδος ζώου που μπορείτε να φιλοξενήσετε.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Προσθήκη του τρέχοντος καταλύματος στη λίστα αν δεν πατήθηκε το "Προσθήκη 2ου"
-        String currentSelection = cbPropertyType.getSelectedItem().toString() +
-                (chkFencedYard.isSelected() ? " (Με περιφραγμένη αυλή)" : " (Χωρίς αυλή)");
+        String currentSelection = cbPropertyType.getSelectedItem().toString();
         if (!accommodationsList.contains(currentSelection)) {
             accommodationsList.add(currentSelection);
         }
 
-        // Δημιουργία Μηνύματος Προεπισκόπησης Δημόσιας Εικόνας
+        // 1. Δημιουργία λίστας για το "Services" (από 1.4)
+        ArrayList<String> servicesList = new ArrayList<>();
+        if (chkDogs.isSelected()) servicesList.add("Σκύλοι");
+        if (chkCats.isSelected()) servicesList.add("Γάτες");
+        if (chkBirds.isSelected()) servicesList.add("Πουλιά");
+        if (chkOtherPets.isSelected()) servicesList.add("Άλλα ζώα");
+        String servicesString = servicesList.isEmpty() ? "-" : String.join(", ", servicesList);
+
+        // 2. Δημιουργία για το "Roommates" (από 1.5)
+        String roommatesString = chkOwnPets.isSelected() ? "Ναι" : "Όχι";
+
+        // 3. Δημιουργία για το "Offers" (από 1.7)
+        ArrayList<String> offersList = new ArrayList<>();
+        if (chkDailyWalk.isSelected()) offersList.add("Βόλτα");
+        if (chkTransportation.isSelected()) offersList.add("Μεταφορά");
+        if (chkBathGrooming.isSelected()) offersList.add("Grooming");
+        String offersString = offersList.isEmpty() ? "Καμία extra παροχή" : String.join(", ", offersList);
+
         StringBuilder hostPreview = new StringBuilder();
         hostPreview.append("--- ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΔΗΜΟΣΙΑΣ ΕΙΚΟΝΑΣ HOST ---\n");
         hostPreview.append("Email: ").append(userEmail).append("\n");
-        hostPreview.append("Χώροι Φιλοξενίας:\n");
-        for (String acc : accommodationsList) {
-            hostPreview.append("- ").append(acc).append("\n");
-        }
-        hostPreview.append("Μέγιστος Αριθμός Ζώων: ").append(spinMaxPets.getValue()).append("\n");
-        hostPreview.append("Extra Υπηρεσίες: ")
-                .append(chkDailyWalk.isSelected() ? "[Βόλτα] " : "")
-                .append(chkTransportation.isSelected() ? "[Μεταφορά] " : "")
-                .append(chkBathGrooming.isSelected() ? "[Grooming] " : "").append("\n\n");
+        hostPreview.append("Τύπος Καταλύματος: ").append(currentSelection).append("\n");
+        hostPreview.append("Δεχόμενα Ζώα (Services): ").append(servicesString).append("\n");
+        hostPreview.append("Ύπαρξη άλλων κατοικίδιων (Roommates): ").append(roommatesString).append("\n");
+        hostPreview.append("Παρεχόμενες Υπηρεσίες (Offers): ").append(offersString).append("\n\n");
+        hostPreview.append("Αποδέχεστε τους κανόνες ασφαλείας για την τελική δημοσίευση του προφίλ;");
 
-        hostPreview.append("ΚΑΝΟΝΕΣ ΑΣΦΑΛΕΙΑΣ:\n");
-        hostPreview.append("1. Δεσμεύεστε για την καθημερινή επίβλεψη και φροντίδα των ζώων.\n");
-        hostPreview.append("2. Υποχρεούστε να ενημερώνετε άμεσα τον ιδιοκτήτη σε επείγον περιστατικό.\n\n");
-        hostPreview.append("Αποδέχεστε τους κανόνες για την τελική δημοσίευση του προφίλ;");
-
-        int finalizeChoice = JOptionPane.showConfirmDialog(this, hostPreview.toString(), "Προεπισκόπηση & Ενεργοποίηση (1.10)", JOptionPane.YES_NO_OPTION);
+        int finalizeChoice = JOptionPane.showConfirmDialog(this, hostPreview.toString(), "Προεπισκόπηση & Ενεργοποίηση", JOptionPane.YES_NO_OPTION);
 
         if (finalizeChoice == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Το Host προφίλ σας ενεργοποιήθηκε και δημοσιεύτηκε επιτυχώς!");
-            this.dispose(); // Κλείσιμο φόρμας Host
-
-            // Βήμα 1.12: Προαιρετική Προσθήκη Κατοικιδίου (Μόνο αν βρισκόμαστε σε Διπλή Ροή)
-            if (isDualFlow) {
-                int finalPetChoice = JOptionPane.showConfirmDialog(null,
-                        "Έχετε κάποιο επιπλέον δικό σας κατοικίδιο για το οποίο μπορεί να χρειαστείτε φιλοξενία στο μέλλον;",
-                        "Προαιρετική Προσθήκη Κατοικιδίου (1.12)", JOptionPane.YES_NO_OPTION);
-
-                if (finalPetChoice == JOptionPane.YES_OPTION) {
-                    JOptionPane.showMessageDialog(null, "Ανακατεύθυνση στην αρχή της ροής Ιδιοκτήτη (Βήμα 1.3)...");
-                    // Ανοίγει την PetOwnerRegistration σε απλή πλέον μορφή (false, false) για αποφυγή ατέρμονου βρόχου
-                    new PetOwnerRegistration(userEmail, false, false).setVisible(true);
-                    return;
+            User user = DatabaseManager.getUser(userEmail);
+            if (user != null) {
+                // Αποθηκεύουμε όλα τα δεδομένα δομημένα στο user.location με διαχωριστικό το '#'
+                // Pattern: Τύπος_Σπιτιού # Services # Roommates # Offers
+                ArrayList<String> encodedHouses = new ArrayList<>();
+                for (String acc : accommodationsList) {
+                    encodedHouses.add(acc + "#" + servicesString + "#" + roommatesString + "#" + offersString);
                 }
+
+                user.location = String.join(" | ", encodedHouses);
+                user.preferences = offersString;
+                DatabaseManager.updateUser(user);
             }
 
-            // Επιστροφή στην κεντρική οθόνη επισκόπησης του προφίλ του χρήστη
-            new ProfilePreview(userEmail).setVisible(true);
+            JOptionPane.showMessageDialog(this, "Το Host προφίλ σας αποθηκεύτηκε στη βάση επιτυχώς!");
+            this.dispose();
+
+            // Και για το 2ο και για το 3ο ενδεχόμενο, επόμενο βήμα είναι το ProfilePreview
+            new ProfilePreview(userEmail, false).setVisible(true);
+
         }
     }
 
-    // --- Custom Rounded Button (Όπως στις υπόλοιπες φόρμες σας) ---
     class RoundedButton extends JButton {
         public RoundedButton(String text) {
             super(text);
