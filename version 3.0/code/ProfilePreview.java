@@ -12,20 +12,17 @@ import java.util.Map;
 public class ProfilePreview extends JFrame {
 
     private User user;
-    private String currentProfilePicPath;
-    private boolean isFinalized = false; // Flag για την κατάσταση οριστικοποίησης
+    private String currentProfilePicPath = "";
+    private boolean isFinalized = false;
 
-    // Maps για τη δυναμική παρακολούθηση των inputs
     private Map<String, JTextField> fieldMap = new HashMap<>();
     private JComboBox<String> cbPreferences;
     private CircularProfileLabel profileImg;
 
-    // Κουμπιά που θα ενεργοποιηθούν ΜΕΤΑ την οριστικοποίηση
     private RoundedButton hostButton;
     private RoundedButton ownerButton;
     private RoundedButton finalizeBtn;
 
-    // --- Color Palette ---
     private static final Color PINK_HEADER = new Color(255, 94, 120);
     private static final Color BG_LIGHT = new Color(245, 245, 245);
     private static final Color BUTTON_PINK = new Color(255, 110, 140);
@@ -39,12 +36,13 @@ public class ProfilePreview extends JFrame {
         user = DatabaseManager.getUser(email);
 
         if (user == null) {
-            JOptionPane.showMessageDialog(this, "User not found!");
+            JOptionPane.showMessageDialog(this, "Μήνυμα Error: Ο χρήστης δεν βρέθηκε στη βάση δεδομένων!", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();
             return;
         }
 
-        this.currentProfilePicPath = user.profilePicPath;
+        // ΦΟΡΤΩΣΗ ΕΙΚΟΝΑΣ ΑΠΟ ΒΑΣΗ
+        this.currentProfilePicPath = (user.profilePicPath != null && !user.profilePicPath.trim().isEmpty()) ? user.profilePicPath : "profileimage.jpg";
 
         setTitle("Profile Preview & Edit");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -78,20 +76,18 @@ public class ProfilePreview extends JFrame {
         contentContainer.setLayout(new BoxLayout(contentContainer, BoxLayout.Y_AXIS));
         contentContainer.setBackground(new Color(252, 252, 252));
 
-        // Center Profile Avatar View
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(new Color(252, 252, 252));
         centerPanel.setBorder(new EmptyBorder(20, 0, 10, 0));
 
-        // CLICKABLE AVATAR LOADER
         profileImg = new CircularProfileLabel(currentProfilePicPath, 140);
         profileImg.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        profileImg.setToolTipText("Click to change profile picture");
+        profileImg.setToolTipText("Κάντε κλικ για εισαγωγή φωτογραφίας προφίλ");
         profileImg.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (isFinalized) return; // Απαγόρευση αλλαγής αν έχει γίνει οριστικοποίηση
+                if (isFinalized) return;
 
                 JFileChooser fileChooser = new JFileChooser();
                 int result = fileChooser.showOpenDialog(ProfilePreview.this);
@@ -103,16 +99,16 @@ public class ProfilePreview extends JFrame {
             }
         });
 
-        JLabel username = new JLabel(user.name + " " + user.lastname);
-        username.setFont(new Font("SansSerif", Font.BOLD, 20));
-        username.setForeground(Color.BLACK);
+        String displayName = (user.name != null && !user.name.equals("NewUser")) ? (user.name + " " + user.lastname) : "Συμπλήρωση Νέου Προφίλ";
+        JLabel username = new JLabel(displayName);
+        username.setFont(new Font("SansSerif", Font.BOLD, 18));
+        username.setForeground(Color.GRAY);
         username.setAlignmentX(Component.CENTER_ALIGNMENT);
         username.setBorder(new EmptyBorder(10, 0, 10, 0));
 
         centerPanel.add(profileImg);
         centerPanel.add(username);
 
-        // Role Indicator View Buttons (ΑΡΧΙΚΑ ΑΠΕΝΕΡΓΟΠΟΙΗΜΕΝΑ)
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setOpaque(false);
@@ -121,13 +117,11 @@ public class ProfilePreview extends JFrame {
         hostButton = new RoundedButton("Host Profile Available", PURPLE, BUTTON_PINK);
         ownerButton = new RoundedButton("Pet Owner Profile Active", PURPLE, BUTTON_PINK);
 
-        // Απενεργοποίηση στην εκκίνηση
         hostButton.setEnabled(false);
         ownerButton.setEnabled(false);
 
-        // Action Listeners για τα κουμπιά ρόλων
-        hostButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Ανακατεύθυνση στο Host Profile..."));
-        ownerButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Ανακατεύθυνση στο Pet Owner Profile..."));
+        ownerButton.addActionListener(e -> new PetOwnerProfile(user.email).setVisible(true));
+        hostButton.addActionListener(e -> new HostProfile(user.email).setVisible(true));
 
         buttonPanel.add(hostButton);
         buttonPanel.add(Box.createVerticalStrut(8));
@@ -136,25 +130,18 @@ public class ProfilePreview extends JFrame {
         centerPanel.add(buttonPanel);
         contentContainer.add(centerPanel);
 
-        ownerButton.addActionListener(e -> {
-            new PetOwnerProfile(user.email).setVisible(true);
-        });
-        hostButton.addActionListener(e -> {
-            new HostProfile(user.email).setVisible(true);
-        });
-
-        // --- EDITABLE INFORMATION GRID PANEL ---
+        // --- EDITABLE INFORMATION GRID PANEL (ΦΟΡΤΩΣΗ ΑΠΟ ΒΑΣΗ) ---
         JPanel infoPanel = new JPanel(new GridLayout(4, 2, 15, 12));
         infoPanel.setBackground(new Color(252, 252, 252));
         infoPanel.setBorder(new EmptyBorder(5, 20, 15, 20));
 
-        infoPanel.add(createEditableInfoField("Name:", user.name));
+        infoPanel.add(createEditableInfoField("Name:", user.name.equals("NewUser") ? "" : user.name));
         infoPanel.add(createEditableInfoField("Pets:", user.pets));
-        infoPanel.add(createEditableInfoField("Lastname:", user.lastname));
+        infoPanel.add(createEditableInfoField("Lastname:", user.lastname.equals("Lastname") ? "" : user.lastname));
         infoPanel.add(createEditableInfoField("Preferences:", user.preferences));
         infoPanel.add(createEditableInfoField("Age:", user.age));
         infoPanel.add(createEditableInfoField("Email:", user.email));
-        infoPanel.add(createEditableInfoField("Location:", user.location));
+        infoPanel.add(createEditableInfoField("Location:", user.location.equals("Athens") ? "" : user.location));
         infoPanel.add(createEditableInfoField("Rating:", user.rating));
 
         contentContainer.add(infoPanel);
@@ -174,6 +161,35 @@ public class ProfilePreview extends JFrame {
 
         mainPanel.add(contentContainer, BorderLayout.CENTER);
         add(mainPanel);
+    }
+
+    public ProfilePreview(String email, boolean startAsFinalized) {
+        this(email);
+        if (startAsFinalized) {
+            freezeUI();
+        }
+    }
+
+    private void freezeUI() {
+        this.isFinalized = true;
+        profileImg.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        profileImg.setToolTipText(null);
+
+        for (JTextField tf : fieldMap.values()) {
+            tf.setEditable(false);
+            tf.setForeground(Color.DARK_GRAY);
+        }
+        if (cbPreferences != null) {
+            cbPreferences.setEnabled(false);
+        }
+
+        finalizeBtn.setEnabled(false);
+        finalizeBtn.setText("Το προφίλ οριστικοποιήθηκε ✓");
+
+        if (user != null && user.role != null) {
+            hostButton.setEnabled(user.role.equalsIgnoreCase("Host") || user.role.equalsIgnoreCase("Dual"));
+            ownerButton.setEnabled(user.role.equalsIgnoreCase("Pet Owner") || user.role.equalsIgnoreCase("Dual"));
+        }
     }
 
     private JPanel createEditableInfoField(String labelText, String valueText) {
@@ -200,8 +216,15 @@ public class ProfilePreview extends JFrame {
         fieldBg.setOpaque(false);
         fieldBg.setPreferredSize(new Dimension(185, 36));
 
+        String safeValue = (valueText != null) ? valueText.trim() : "";
+
         if (labelText.equals("Rating:")) {
-            JLabel ratingLabel = new JLabel(valueText + " \u2605");
+            String cleanRating = "0";
+            if (!safeValue.isEmpty() && (Character.isDigit(safeValue.charAt(0)) || safeValue.contains("."))) {
+                cleanRating = safeValue;
+            }
+
+            JLabel ratingLabel = new JLabel(cleanRating + " \u2605");
             ratingLabel.setForeground(Color.DARK_GRAY);
             ratingLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
             ratingLabel.setBorder(new EmptyBorder(0, 15, 0, 15));
@@ -209,23 +232,34 @@ public class ProfilePreview extends JFrame {
         }
         else if (labelText.equals("Preferences:")) {
             String[] options = {
-                    "animal lover", "dog person", "cat person", "nemo lover",
+                    "- Επιλέξτε -", "animal lover", "dog person", "cat person", "nemo lover",
                     "chef with a mouse in his hat", "stole jafar's parrot", "other"
             };
             cbPreferences = new JComboBox<>(options);
             cbPreferences.setFont(new Font("SansSerif", Font.BOLD, 12));
             cbPreferences.setBorder(new EmptyBorder(0, 10, 0, 10));
             cbPreferences.setOpaque(false);
-            cbPreferences.setSelectedItem(valueText.toLowerCase());
+
+            for (String option : options) {
+                if (option.equalsIgnoreCase(safeValue)) {
+                    cbPreferences.setSelectedItem(option);
+                    break;
+                }
+            }
             fieldBg.add(cbPreferences, BorderLayout.CENTER);
         }
         else {
-            JTextField textInput = new JTextField(valueText);
+            JTextField textInput = new JTextField(safeValue);
             textInput.setForeground(Color.BLACK);
             textInput.setFont(new Font("SansSerif", Font.BOLD, 13));
             textInput.setBorder(new EmptyBorder(0, 15, 0, 15));
             textInput.setOpaque(false);
             textInput.setCaretColor(PINK_HEADER);
+
+            if (labelText.equals("Email:")) {
+                textInput.setEditable(false);
+                textInput.setForeground(Color.DARK_GRAY);
+            }
 
             fieldMap.put(labelText, textInput);
             fieldBg.add(textInput, BorderLayout.CENTER);
@@ -238,20 +272,27 @@ public class ProfilePreview extends JFrame {
     }
 
     private void saveAndFinalizeProfile() {
-        String updatedName = fieldMap.get("Name:").getText().trim();
-        String updatedLastname = fieldMap.get("Lastname:").getText().trim();
-        String updatedAge = fieldMap.get("Age:").getText().trim();
-        String updatedEmail = fieldMap.get("Email:").getText().trim();
-        String updatedPets = fieldMap.get("Pets:").getText().trim();
-        String updatedLocation = fieldMap.get("Location:").getText().trim();
-        String updatedPrefs = cbPreferences.getSelectedItem().toString();
+        String updatedName = fieldMap.get("Name:") != null ? fieldMap.get("Name:").getText().trim() : "";
+        String updatedLastname = fieldMap.get("Lastname:") != null ? fieldMap.get("Lastname:").getText().trim() : "";
+        String updatedAge = fieldMap.get("Age:") != null ? fieldMap.get("Age:").getText().trim() : "";
+        String updatedEmail = fieldMap.get("Email:") != null ? fieldMap.get("Email:").getText().trim() : "";
+        String updatedPets = fieldMap.get("Pets:") != null ? fieldMap.get("Pets:").getText().trim() : "";
+        String updatedLocation = fieldMap.get("Location:") != null ? fieldMap.get("Location:").getText().trim() : "";
+        String updatedPrefs = cbPreferences != null ? cbPreferences.getSelectedItem().toString() : "- Επιλέξτε -";
 
-        if (updatedName.isEmpty() || updatedLastname.isEmpty() || updatedEmail.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Fields like Name, Lastname, and Email cannot be empty!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+        if (currentProfilePicPath.isEmpty() || currentProfilePicPath.equals("profileimage.jpg")) {
+            JOptionPane.showMessageDialog(this, "Μήνυμα Error: Πρέπει να επιλέξετε μια φωτογραφία προφίλ!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (updatedName.isEmpty() || updatedLastname.isEmpty() || updatedAge.isEmpty() || updatedPets.isEmpty() || updatedLocation.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Μήνυμα Error: Όλα τα πεδία κειμένου πρέπει να συμπληρωθούν!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (updatedPrefs.equals("- Επιλέξτε -")) {
+            JOptionPane.showMessageDialog(this, "Μήνυμα Error: Παρακαλώ επιλέξτε μια προτίμηση από τη λίστα!", "Validation Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Αποθήκευση αλλαγών στο αντικείμενο user
         user.name = updatedName;
         user.lastname = updatedLastname;
         user.age = updatedAge;
@@ -262,169 +303,52 @@ public class ProfilePreview extends JFrame {
         user.profilePicPath = currentProfilePicPath;
 
         DatabaseManager.updateUser(user);
+        freezeUI();
 
-        // --- ΚΛΕΙΔΩΜΑ ΤΗΣ ΦΟΡΜΑΣ (Freeze UI) ---
-        isFinalized = true;
-        profileImg.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        profileImg.setToolTipText(null);
-
-        // Απενεργοποίηση όλων των TextFields
-        for (JTextField tf : fieldMap.values()) {
-            tf.setEditable(false);
-            tf.setForeground(Color.DARK_GRAY); // Αλλαγή χρώματος για ένδειξη read-only
-        }
-        // Απενεργοποίηση Dropdown
-        cbPreferences.setEnabled(false);
-
-        // Απενεργοποίηση του κουμπιού Οριστικοποίησης
-        finalizeBtn.setEnabled(false);
-        finalizeBtn.setText("Το προφίλ οριστικοποιήθηκε ✓");
-
-        // --- ΕΝΕΡΓΟΠΟΙΗΣΗ ΤΩΝ ΚΟΥΜΠΙΩΝ ΡΟΛΩΝ ---
-        hostButton.setEnabled(true);
-        ownerButton.setEnabled(true);
-
-        // Ενημερωτικό Μήνυμα Επιτυχίας
         JOptionPane.showMessageDialog(this,
-                "Το τελικό προφίλ αποθηκεύτηκε επιτυχώς!\nΤώρα μπορείτε να περιηγηθείτε στα κουμπιά Host και Pet Owner.",
+                "Μήνυμα Επιβεβαίωσης: Το βασικό προφίλ αποθηκεύτηκε επιτυχώς!",
                 "petbnb Σύστημα", JOptionPane.INFORMATION_MESSAGE);
+
+        this.dispose();
+
+        // --- ΕΛΕΓΧΟΣ ΡΟΗΣ ΒΑΣΕΙ ΤΟΥ user.role ΠΟΥ ΕΠΕΛΕΞΕ ΣΤΟ CHOICELOGIN ---
+        if (user.role != null && user.role.equalsIgnoreCase("Dual")) {
+            // 3ο Ενδεχόμενο: Μετά το ProfilePreview ανοίγει το PetOwnerProfile για οριστικοποίηση
+            JOptionPane.showMessageDialog(null, "Ροή Dual: Ανακατεύθυνση στο Pet Owner Profile για οριστικοποίηση.");
+            new PetOwnerProfile(user.email).setVisible(true);
+        }
+        else if (user.role != null && user.role.equalsIgnoreCase("Host")) {
+            // 2ο Ενδεχόμενο: Μετά το ProfilePreview ανοίγει το HostProfile για οριστικοποίηση
+            JOptionPane.showMessageDialog(null, "Ροή Host: Ανακατεύθυνση στο Host Profile για οριστικοποίηση.");
+            new HostProfile(user.email).setVisible(true);
+        }
+        else {
+            // 1ο Ενδεχόμενο: Μετά το ProfilePreview ανοίγει το Pet Owner Profile για οριστικοποίηση
+            JOptionPane.showMessageDialog(null, "Ροή Pet Owner: Ανακατεύθυνση στο Pet Owner Profile για οριστικοποίηση.");
+            new PetOwnerProfile(user.email).setVisible(true);
+        }
     }
 
-    // --- REUSABLE DYNAMIC STYLED COMPONENTS ---
-
+    // --- REUSABLE COMPONENTS ---
     class RoundedButton extends JButton {
         private Color backgroundColor;
-
         public RoundedButton(String text, Color textColor, Color bgColor) {
             super(text);
             this.backgroundColor = bgColor;
-            setContentAreaFilled(false);
-            setBorderPainted(false);
-            setFocusPainted(false);
-
-            setForeground(textColor);
-            setFont(new Font("SansSerif", Font.BOLD, 15));
-            setCursor(new Cursor(Cursor.HAND_CURSOR));
-            setAlignmentX(Component.CENTER_ALIGNMENT);
-            setMaximumSize(new Dimension(320, 45));
+            setContentAreaFilled(false); setBorderPainted(false); setFocusPainted(false);
+            setForeground(textColor); fontSet();
         }
-
-        @Override
-        public void setEnabled(boolean enabled) {
-            super.setEnabled(enabled);
-            // Δυναμική αλλαγή του κέρσορα ανάλογα με το αν είναι ενεργό το κουμπί
-            if (enabled) {
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
-            } else {
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            }
-            repaint();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            // Αν το κουμπί είναι απενεργοποιημένο, δείξε απαλό γκρι χρώμα
-            if (!isEnabled()) {
-                g2.setColor(GRAY_DISABLED);
-            } else {
-                g2.setColor(backgroundColor);
-            }
-
-            int arc = getHeight();
-            g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arc, arc));
-            g2.dispose();
-            super.paintComponent(g);
-        }
+        private void fontSet() { setFont(new Font("SansSerif", Font.BOLD, 15)); setCursor(new Cursor(Cursor.HAND_CURSOR)); setAlignmentX(Component.CENTER_ALIGNMENT); setMaximumSize(new Dimension(320, 45)); }
+        @Override public void setEnabled(boolean enabled) { super.setEnabled(enabled); setCursor(new Cursor(enabled ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR)); repaint(); }
+        @Override protected void paintComponent(Graphics g) { Graphics2D g2 = (Graphics2D) g.create(); g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); g2.setColor(isEnabled() ? backgroundColor : GRAY_DISABLED); int arc = getHeight(); g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arc, arc)); g2.dispose(); super.paintComponent(g); }
     }
 
     class CircularProfileLabel extends JLabel {
-        private Image image;
-        private final int borderThickness = 4;
-
-        public CircularProfileLabel(String imagePath, int size) {
-            setPreferredSize(new Dimension(size, size));
-            setMaximumSize(new Dimension(size, size));
-            setMinimumSize(new Dimension(size, size));
-            setAlignmentX(Component.CENTER_ALIGNMENT);
-            updateImage(imagePath);
-        }
-
-        public void updateImage(String imagePath) {
-            try {
-                File imgFile = new File(imagePath);
-                if (imgFile.exists()) {
-                    image = new ImageIcon(imagePath).getImage();
-                } else {
-                    image = new ImageIcon(getClass().getResource(imagePath)).getImage();
-                }
-            } catch (Exception e) {
-                image = null;
-            }
-            repaint();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-            int size = getWidth();
-            int diameter = size - (borderThickness * 2);
-
-            g2.setColor(new Color(230, 230, 230));
-            g2.fill(new Ellipse2D.Double(borderThickness, borderThickness, diameter, diameter));
-
-            if (image != null) {
-                g2.setClip(new Ellipse2D.Double(borderThickness, borderThickness, diameter, diameter));
-                g2.drawImage(image, borderThickness, borderThickness, diameter, diameter, this);
-                g2.setClip(null);
-            } else {
-                g2.setColor(Color.GRAY);
-                g2.setFont(new Font("SansSerif", Font.BOLD, 12));
-                FontMetrics fm = g2.getFontMetrics();
-                String text = isFinalized ? "Profile Photo" : "Edit Photo";
-                int textX = (size - fm.stringWidth(text)) / 2;
-                int textY = ((size - fm.getHeight()) / 2) + fm.getAscent();
-                g2.drawString(text, textX, textY);
-            }
-
-            g2.setColor(Color.WHITE);
-            g2.setStroke(new BasicStroke(borderThickness));
-            g2.draw(new Ellipse2D.Double(
-                    borderThickness / 2.0,
-                    borderThickness / 2.0,
-                    size - borderThickness,
-                    size - borderThickness
-            ));
-            g2.dispose();
-        }
+        private Image image; private final int borderThickness = 4;
+        public CircularProfileLabel(String imagePath, int size) { setPreferredSize(new Dimension(size, size)); setMaximumSize(new Dimension(size, size)); setMinimumSize(new Dimension(size, size)); setAlignmentX(Component.CENTER_ALIGNMENT); updateImage(imagePath); }
+        public void updateImage(String imagePath) { if (imagePath == null || imagePath.isEmpty() || imagePath.equals("profileimage.jpg")) { image = null; repaint(); return; } try { File imgFile = new File(imagePath); if (imgFile.exists()) { image = new ImageIcon(imagePath).getImage(); } else { image = new ImageIcon(getClass().getResource(imagePath)).getImage(); } } catch (Exception e) { image = null; } repaint(); }
+        @Override protected void paintComponent(Graphics g) { Graphics2D g2 = (Graphics2D) g.create(); g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); int size = getWidth(); int diameter = size - (borderThickness * 2); g2.setColor(new Color(230, 230, 230)); g2.fill(new Ellipse2D.Double(borderThickness, borderThickness, diameter, diameter)); if (image != null) { g2.setClip(new Ellipse2D.Double(borderThickness, borderThickness, diameter, diameter)); g2.drawImage(image, borderThickness, borderThickness, diameter, diameter, this); g2.setClip(null); } else { g2.setColor(Color.DARK_GRAY); g2.setFont(new Font("SansSerif", Font.BOLD, 13)); FontMetrics fm = g2.getFontMetrics(); String text = "Προσθήκη Φωτό"; int textX = (size - fm.stringWidth(text)) / 2; int textY = ((size - fm.getHeight()) / 2) + fm.getAscent(); g2.drawString(text, textX, textY); } g2.setColor(Color.WHITE); g2.setStroke(new BasicStroke(borderThickness)); g2.draw(new Ellipse2D.Double(borderThickness / 2.0, borderThickness / 2.0, size - borderThickness, size - borderThickness)); g2.dispose(); }
     }
 
-    // --- MOCK DATABASE CONTROLLERS ---
-    public static class User {
-        public String name, lastname, email, age, location, rating, preferences, pets, profilePicPath;
-        public User(String n, String l, String e, String a, String loc, String r, String p, String pt, String pic) {
-            this.name = n; this.lastname = l; this.email = e; this.age = a;
-            this.location = loc; this.rating = r; this.preferences = p; this.pets = pt; this.profilePicPath = pic;
-        }
-    }
-
-    public static class DatabaseManager {
-        public static User getUser(String email) {
-            return new User("Erato", "Kapourani", email, "24", "Athens, GR", "4.9", "stole jafar's parrot", "Rex (Dog), Luna (Cat)", "default_avatar.png");
-        }
-        public static void updateUser(User user) {
-            System.out.println("User metadata written successfully into core database storage context.");
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new ProfilePreview("eratokapourani@gmail.com").setVisible(true);
-        });
-    }
+    public static void main(String[] args) { SwingUtilities.invokeLater(() -> new ProfilePreview("eratokapourani@gmail.com", false).setVisible(true)); }
 }
