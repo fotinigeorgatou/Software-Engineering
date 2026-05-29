@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
-import java.io.File;
 
 public class choicelogin extends JFrame {
     private String userEmail;
@@ -57,43 +56,50 @@ public class choicelogin extends JFrame {
             add(subtitle, gbc);
 
             // 4. Buttons
-            // --- Pet Owner Button (Αυτόνομη Ροή 1) ---
+            // --- Pet Owner Button ---
             gbc.gridy = 3;
             gbc.insets = new Insets(0, 0, 15, 0);
             JButton ownerBtn = new RoundedButton("Pet Owner");
             ownerBtn.addActionListener(e -> {
+                updateUserRole("Pet Owner");
                 choicelogin.this.dispose();
-                // isDualRole = false, incomingFromDual = false
+                // Opens only ONE Pet Owner Registration flow
                 new PetOwnerRegistration(userEmail, false, false).setVisible(true);
             });
             add(ownerBtn, gbc);
 
-            // --- Host Button (Αυτόνομη Ροή 2) ---
+            // --- Host Button ---
             gbc.gridy = 4;
             gbc.insets = new Insets(0, 0, 15, 0);
             JButton hostBtn = new RoundedButton("Host");
             hostBtn.addActionListener(e -> {
+                updateUserRole("Host");
                 choicelogin.this.dispose();
-                // isDualFlow = false (Αυτόνομος Host)
+                // Opens only ONE Host Registration window directly
                 new HostRegistration(userEmail, false).setVisible(true);
             });
             add(hostBtn, gbc);
 
-            // --- Dual Button (Συνδυαστική Ροή 3) ---
+            // --- Dual Button ---
             gbc.gridy = 5;
             gbc.insets = new Insets(0, 0, 0, 0);
             JButton dualBtn = new RoundedButton("Dual Profile");
             dualBtn.addActionListener(e -> {
+                updateUserRole("Dual");
                 choicelogin.this.dispose();
 
-                // Βήμα 1.2: Ενημέρωση συστήματος για την έναρξη της διπλής ροής
                 JOptionPane.showMessageDialog(this,
-                        "Επιλέξατε Διπλό Ρόλο (Owner & Host)!\nΗ διαδικασία ξεκινά με την καταχώρηση του κατοικιδίου σας.",
-                        "petbnb", JOptionPane.INFORMATION_MESSAGE);
+                        "Επιλέξατε Διπλό Ρόλο (Owner & Host)!\n\n" +
+                                "Βήμα 1: Εγγραφή Κατοικιδίου (Pet Owner)\n" +
+                                "Βήμα 2: Στοιχεία Φιλοξενίας (Host)\n" +
+                                "Βήμα 3: Προεπισκόπηση Προφίλ (Preview)\n" +
+                                "Βήμα 4: Οριστικοποίηση Pet Owner Profile\n" +
+                                "Βήμα 5: Οριστικοποίηση Host Profile\n" +
+                                "Βήμα 6: Final Profile!",
+                        "petbnb Dual Flow", JOptionPane.INFORMATION_MESSAGE);
 
-                // Κλήση της PetOwnerRegistration με flags για Dual
-                // ώστε να γνωρίζει να καλέσει αυτόματα τη HostRegistration μετά!
-                new PetOwnerRegistration(userEmail, true, true).setVisible(true);
+                // starts Dual Flow at Pet Owner Registration
+                new PetOwnerRegistration(userEmail, true, false).setVisible(true);
             });
             add(dualBtn, gbc);
         }
@@ -108,14 +114,21 @@ public class choicelogin extends JFrame {
         }
     }
 
-    // --- CUSTOM BUTTON CLASS ---
+    private void updateUserRole(String selectedRole) {
+        User user = DatabaseManager.getUser(userEmail);
+        if (user != null) {
+            user.role = selectedRole;
+            DatabaseManager.updateUser(user);
+        }
+    }
+
     class RoundedButton extends JButton {
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
             setBorderPainted(false);
             setFocusPainted(false);
-            setForeground(Color.WHITE); // Λευκά γράμματα για να κάνουν αντίθεση με το PINK φόντο
+            setForeground(Color.WHITE);
             setFont(new Font("SansSerif", Font.BOLD, 16));
             setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
@@ -124,17 +137,14 @@ public class choicelogin extends JFrame {
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
             g2.setColor(PINK);
             int arc = getHeight();
             g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arc, arc));
-
             g2.dispose();
             super.paintComponent(g);
         }
     }
 
-    // --- LOGO PANEL ---
     class LogoPanel extends JPanel {
         private Image logoImage;
 
@@ -142,8 +152,12 @@ public class choicelogin extends JFrame {
             setPreferredSize(new Dimension(220, 120));
             setOpaque(false);
             try {
-                ImageIcon icon = new ImageIcon("petbnblogotran.png");
-                logoImage = icon.getImage();
+                java.io.File file = new java.io.File("petbnblogotran.png");
+                if (file.exists()) {
+                    logoImage = new ImageIcon("petbnblogotran.png").getImage();
+                } else {
+                    logoImage = new ImageIcon(getClass().getResource("/petbnblogotran.png")).getImage();
+                }
             } catch (Exception e) {
                 System.out.println("Could not find petbnblogotran.png");
             }
