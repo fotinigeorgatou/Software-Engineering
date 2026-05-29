@@ -3,7 +3,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
-import java.io.File;
 import java.util.ArrayList;
 
 public class PetOwnerRegistration extends JFrame {
@@ -12,27 +11,22 @@ public class PetOwnerRegistration extends JFrame {
     private String userEmail;
     private boolean isDualRole;
 
-    // Λίστα για την αποθήκευση πολλαπλών κατοικιδίων (Βήμα 1.10)
     private ArrayList<String> petsList = new ArrayList<>();
 
-    // --- Color Palette ---
     private static final Color BG_DARK = new Color(26, 26, 26);
     private static final Color CARD_WHITE = new Color(249, 250, 243);
-    private static final Color INPUT_GRAY = new Color(223, 223, 223);
     private static final Color PINK = new Color(255, 60, 91);
     private static final Color PURPLE = new Color(193, 163, 229);
 
-    // Φόρμα Στοιχείων (Components)
     private JTextField txtName, txtSpecies, txtAge, txtGender, txtBreed;
     private JComboBox<String> cbSocial, cbAggression, cbTraining, cbOtherAnimals;
     private JTextArea txtHealth, txtDiet, txtMeds;
     private JCheckBox chkIndoor, chkYard, chkNoOtherPets;
     private JSpinner spinWalks;
     private JCheckBox chkPhotos, chkGrooming;
-    private JLabel lblPetImgPath, lblHealthBookPath;
+    private JLabel lblHealthBookPath;
     private JTextField txtEmergencyPhone, txtVetPhone, txtContactPhone;
 
-    // ΔΙΟΡΘΩΜΕΝΟΣ CONSTRUCTOR: Δέχεται και την πληροφορία για τη διπλή ροή
     public PetOwnerRegistration(String email, boolean isDualRole, boolean incomingFromDual) {
         this.userEmail = email;
         this.isDualRole = isDualRole;
@@ -43,7 +37,6 @@ public class PetOwnerRegistration extends JFrame {
         setSize(500, 800);
         setLocationRelativeTo(null);
 
-        // Κεντρικό Panel με ScrollPane επειδή η φόρμα είναι μεγάλη
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_DARK);
 
@@ -60,8 +53,8 @@ public class PetOwnerRegistration extends JFrame {
 
         // 1.3 Βασικά Στοιχεία Κατοικιδίου
         JPanel p1 = createSectionPanel("1.3 Βασικά Στοιχεία Κατοικιδίου");
-        txtName = addFormField(p1, "Όνομα:");
-        txtSpecies = addFormField(p1, "Είδος (π.χ. Σκύλος, Γάτα):");
+        txtName = addFormField(p1, "Όνομα (*):");
+        txtSpecies = addFormField(p1, "Είδος (π.χ. Σκύλος, Γάτα) (*):");
         txtAge = addFormField(p1, "Ηλικία:");
         txtGender = addFormField(p1, "Φύλο:");
         txtBreed = addFormField(p1, "Ράτσα:");
@@ -101,28 +94,21 @@ public class PetOwnerRegistration extends JFrame {
         p5.add(chkPhotos); p5.add(chkGrooming);
         contentPanel.add(p5);
 
-        // 1.8 Ανέβασμα οπτικού υλικού και εγγράφων
-        JPanel p6 = createSectionPanel("1.8 Έγγραφα & Φωτογραφίες");
-        JButton btnImg = new RoundedButton("Επιλογή Φωτογραφίας");
-        lblPetImgPath = new JLabel("Δεν επιλέχθηκε αρχείο");
-        btnImg.addActionListener(e -> chooseFile(lblPetImgPath));
-
+        // 1.8 Έγγραφα
+        JPanel p6 = createSectionPanel("1.8 Έγγραφα & Πιστοποιητικά");
         JButton btnDoc = new RoundedButton("Αντίγραφο Βιβλιαρίου Υγείας");
         lblHealthBookPath = new JLabel("Δεν επιλέχθηκε αρχείο");
         btnDoc.addActionListener(e -> chooseFile(lblHealthBookPath));
-
-        p6.add(btnImg); p6.add(lblPetImgPath);
         p6.add(btnDoc); p6.add(lblHealthBookPath);
         contentPanel.add(p6);
 
-        // 1.9 Στοιχεία επικοινωνίας έκτακτης ανάγκης
+        // 1.9 Επικοινωνία Έκτακτης Ανάγκης
         JPanel p7 = createSectionPanel("1.9 Επικοινωνία Έκτακτης Ανάγκης");
         txtEmergencyPhone = addFormField(p7, "Τηλέφωνο Ιδιοκτήτη (*):");
         txtVetPhone = addFormField(p7, "Τηλέφωνο Κτηνιάτρου (Προαιρετικό):");
         txtContactPhone = addFormField(p7, "Τηλέφωνο Οικείου Προσώπου (Προαιρετικό):");
         contentPanel.add(p7);
 
-        // Κουμπιά Διαχείρισης Ροής (1.10 & 1.11)
         JPanel ActionPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         ActionPanel.setBackground(CARD_WHITE);
         ActionPanel.setBorder(new EmptyBorder(15, 0, 0, 0));
@@ -145,24 +131,104 @@ public class PetOwnerRegistration extends JFrame {
         add(mainPanel);
     }
 
-    // --- Helper Methods Σχεδίασης ---
+    private String compilePetData() {
+        String name = txtName.getText().trim();
+        String species = txtSpecies.getText().trim();
+        String age = txtAge.getText().trim().isEmpty() ? "Άγνωστη ηλικία" : txtAge.getText().trim();
+        String gender = txtGender.getText().trim().isEmpty() ? "Μη ορισμένο" : txtGender.getText().trim();
+        String breed = txtBreed.getText().trim().isEmpty() ? "Μιξ / Άγνωστη" : txtBreed.getText().trim();
+
+        String social = cbSocial.getSelectedItem().toString();
+        String aggression = cbAggression.getSelectedItem().toString();
+        String training = cbTraining.getSelectedItem().toString();
+        String otherAnimals = cbOtherAnimals.getSelectedItem().toString();
+
+        String health = txtHealth.getText().trim().isEmpty() ? "Κανένα" : txtHealth.getText().trim();
+        String diet = txtDiet.getText().trim().isEmpty() ? "Κανονική" : txtDiet.getText().trim();
+        String meds = txtMeds.getText().trim().isEmpty() ? "Καμία" : txtMeds.getText().trim();
+
+        String indoor = chkIndoor.isSelected() ? "Ναι" : "Όχι";
+        String yard = chkYard.isSelected() ? "Ναι" : "Όχι";
+        String noOtherPets = chkNoOtherPets.isSelected() ? "Ναι" : "Όχι";
+
+        String walks = spinWalks.getValue().toString();
+        String photos = chkPhotos.isSelected() ? "Ναι" : "Όχι";
+        String grooming = chkGrooming.isSelected() ? "Ναι" : "Όχι";
+
+        String imgName = "default_pet.png";
+
+        return name + "|" + species + "|" + age + "|" + gender + "|" + breed + "|" +
+                social + "|" + aggression + "|" + training + "|" + otherAnimals + "|" +
+                health + "|" + diet + "|" + meds + "|" +
+                indoor + "|" + yard + "|" + noOtherPets + "|" +
+                walks + "|" + photos + "|" + grooming + "|" + imgName;
+    }
+
+    private void handleAddMorePet() {
+        if (txtName.getText().trim().isEmpty() || txtSpecies.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Παρακαλώ συμπληρώστε τουλάχιστον όνομα και είδος.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        petsList.add(compilePetData());
+        clearFields();
+        JOptionPane.showMessageDialog(this, "Το κατοικίδιο προστέθηκε! Έτοιμο για το επόμενο.");
+    }
+
+    // --- ΔΙΟΡΘΩΜΕΝΗ ΜΕΘΟΔΟΣ ΟΛΟΚΛΗΡΩΣΗΣ ΡΟΗΣ ---
+    private void handleFinalization() {
+        if (txtName.getText().trim().isEmpty() && petsList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Πρέπει να καταχωρήσετε τουλάχιστον ένα κατοικίδιο.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (txtEmergencyPhone.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Το τηλέφωνο ανάγκης είναι υποχρεωτικό.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!txtName.getText().trim().isEmpty()) {
+            petsList.add(compilePetData());
+        }
+
+        User user = DatabaseManager.getUser(userEmail);
+        if (user != null) {
+            user.pets = String.join(" | ", petsList);
+            DatabaseManager.updateUser(user);
+
+            JOptionPane.showMessageDialog(this, "Τα στοιχεία των κατοικιδίων αποθηκεύτηκαν!");
+            this.dispose();
+
+            if (isDualRole) {
+                // 3ο Ενδεχόμενο: Πηγαίνει στο HostRegistration
+                new HostRegistration(userEmail, true).setVisible(true);
+            } else {
+                // 1ο Ενδεχόμενο: Πηγαίνει στο ProfilePreview πριν την οριστικοποίηση
+                new ProfilePreview(userEmail, false).setVisible(true);
+            }
+        }
+
+
+    }
+
+    private void clearFields() {
+        txtName.setText(""); txtSpecies.setText(""); txtAge.setText("");
+        txtGender.setText(""); txtBreed.setText(""); txtHealth.setText("");
+        txtDiet.setText(""); txtMeds.setText("");
+        lblHealthBookPath.setText("Δεν επιλέχθηκε αρχείο");
+    }
+
     private JPanel createSectionPanel(String title) {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBackground(CARD_WHITE);
-        p.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(PURPLE, 1), title,
-                TitledBorder.LEFT, TitledBorder.TOP, new Font("SansSerif", Font.BOLD, 13), PURPLE));
+        p.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(PURPLE, 1), title, TitledBorder.LEFT, TitledBorder.TOP, new Font("SansSerif", Font.BOLD, 13), PURPLE));
         return p;
     }
 
     private JTextField addFormField(JPanel panel, String labelText) {
         JLabel lbl = new JLabel(labelText);
-        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
         JTextField tf = new JTextField();
         tf.setMaximumSize(new Dimension(420, 30));
-        panel.add(lbl);
-        panel.add(tf);
+        panel.add(lbl); panel.add(tf);
         panel.add(Box.createVerticalStrut(5));
         return tf;
     }
@@ -171,8 +237,7 @@ public class PetOwnerRegistration extends JFrame {
         JLabel lbl = new JLabel(labelText);
         JComboBox<String> cb = new JComboBox<>(items);
         cb.setMaximumSize(new Dimension(420, 30));
-        panel.add(lbl);
-        panel.add(cb);
+        panel.add(lbl); panel.add(cb);
         panel.add(Box.createVerticalStrut(5));
         return cb;
     }
@@ -183,101 +248,21 @@ public class PetOwnerRegistration extends JFrame {
         ta.setLineWrap(true);
         JScrollPane sp = new JScrollPane(ta);
         sp.setMaximumSize(new Dimension(420, 50));
-        panel.add(lbl);
-        panel.add(sp);
+        panel.add(lbl); panel.add(sp);
         panel.add(Box.createVerticalStrut(5));
         return ta;
     }
 
     private void chooseFile(JLabel label) {
         JFileChooser chooser = new JFileChooser();
-        int ret = chooser.showOpenDialog(this);
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            label.setText(file.getName());
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            label.setText(chooser.getSelectedFile().getName());
         }
     }
 
-    // --- Βήμα 1.10: Προσθήκη Επιπλέον Κατοικιδίου ---
-    private void handleAddMorePet() {
-        if (txtName.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Παρακαλώ συμπληρώστε τουλάχιστον το όνομα του τρέχοντος κατοικιδίου.");
-            return;
-        }
-        // Αποθήκευση τρέχοντος στην προσωρινή μνήμη
-        petsList.add(txtName.getText().trim() + " (" + txtSpecies.getText().trim() + ")");
-
-        // Καθαρισμός φορμών για το επόμενο ζώο (Επιστροφή στο 1.3)
-        txtName.setText(""); txtSpecies.setText(""); txtAge.setText("");
-        txtGender.setText(""); txtBreed.setText(""); txtHealth.setText("");
-        txtDiet.setText(""); txtMeds.setText("");
-        lblPetImgPath.setText("Δεν επιλέχθηκε αρχείο");
-        lblHealthBookPath.setText("Δεν επιλέχθηκε αρχείο");
-
-        JOptionPane.showMessageDialog(this, "Το κατοικίδιο προστέθηκε! Συμπληρώστε τα στοιχεία για το επόμενο.");
-    }
-
-    // --- ΔΙΟΡΘΩΜΕΝΟ Βήμα 1.11 & 1.12: Προεπισκόπηση, Οριστικοποίηση & Διακλάδωση Ροής ---
-    private void handleFinalization() {
-        if (txtName.getText().trim().isEmpty() && petsList.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Πρέπει να καταχωρήσετε τουλάχιστον ένα κατοικίδιο.");
-            return;
-        }
-        if (txtEmergencyPhone.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Το τηλέφωνο ανάγκης ιδιοκτήτη είναι υποχρεωτικό.");
-            return;
-        }
-
-        if (!txtName.getText().trim().isEmpty()) {
-            String currentPet = txtName.getText().trim() + " (" + txtSpecies.getText().trim() + ")";
-            if (!petsList.contains(currentPet)) {
-                petsList.add(currentPet);
-            }
-        }
-
-        // 1.11 Προεπισκόπηση & Οριστικοποίηση
-        StringBuilder previewMessage = new StringBuilder();
-        previewMessage.append("--- ΠΡΟΕΠΙΣΚΟΠΗΣΗ ΠΡΟΦΙΛ ---\n");
-        previewMessage.append("Email Χρήστη: ").append(userEmail).append("\n");
-        previewMessage.append("Καταχωρημένα Κατοικίδια:\n");
-        for (String pet : petsList) {
-            previewMessage.append("- ").append(pet).append("\n");
-        }
-        previewMessage.append("Τηλ. Έκτακτης Ανάγκης: ").append(txtEmergencyPhone.getText()).append("\n\n");
-        previewMessage.append("Επιβεβαιώνετε την οριστικοποίηση της εγγραφής;");
-
-        int confirm = JOptionPane.showConfirmDialog(this, previewMessage.toString(), "Προεπισκόπηση (1.11)", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Η εγγραφή των κατοικιδίων ολοκληρώθηκε επιτυχώς!");
-
-            // 1.12 Προαιρετική Ενεργοποίηση Ρόλου Host (αν δεν έχει έρθει ήδη από τη διπλή επιλογή)
-            if (!isDualRole && !incomingFromDual) {
-                int hostChoice = JOptionPane.showConfirmDialog(this,
-                        "Θέλετε να ενεργοποιήσετε το προφίλ σας και ως Φιλοξενητής (Host);",
-                        "Προαιρετική Ενεργοποίηση Ρόλου Host (1.12)", JOptionPane.YES_NO_OPTION);
-
-                if (hostChoice == JOptionPane.YES_OPTION) {
-                    isDualRole = true;
-                }
-            }
-
-            this.dispose(); // Κλείσιμο της τρέχουσας φόρμας
-
-            // ΕΛΕΓΧΟΣ ΡΟΗΣ: Αν είναι Dual ή προέρχεται από Dual, ανοίγει αυτόματα ο Host
-            if (isDualRole || incomingFromDual) {
-                JOptionPane.showMessageDialog(null, "Μετάβαση στο Μέρος Β: Καταχώρηση Καταλύματος Host.");
-                // Ανοίγει την κλάση του Host περνώντας true για τη διπλή ροή
-                new HostRegistration(userEmail, true).setVisible(true);
-            } else {
-                // Επιστροφή στην απλή προεπισκόπηση του Profile
-                new ProfilePreview(userEmail).setVisible(true);
-            }
-        }
-    }
-
-    // --- Custom Rounded Button ---
     class RoundedButton extends JButton {
+        private Color buttonColor = PINK;
+
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
@@ -288,11 +273,16 @@ public class PetOwnerRegistration extends JFrame {
             setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
 
+        public RoundedButton(String text, Color customColor) {
+            this(text);
+            this.buttonColor = customColor;
+        }
+
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(PINK);
+            g2.setColor(buttonColor);
             int arc = getHeight();
             g2.fill(new RoundRectangle2D.Float(0, 0, getWidth(), getHeight(), arc, arc));
             g2.dispose();
