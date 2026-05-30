@@ -1,0 +1,54 @@
+john@gmail.com;1234;Pet Owner;John;Smith;22;Athens;1 dog;dog person;4.8;profileimage.jpg
+anna@gmail.com;abcd;Host;Anna;Brown;25;Thessaloniki;2 cats;cat person;4.9;profileimage.jpg
+eratokapourani@gmail.com;erato1234;Dual;45;45;54;54;45||||||||||||||||||default_pet.png|Sherlock είναι ένα υπέροχο Κατοικίδιο που καταχωρήθηκε επιτυχώς στην πλατφόρμα petbnb!;stole jafar's parrot;dog person;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+arismanesis@gmail.com;aris1234;Pet Owner;Aris;Manesis;18;Κρήτη;Μάγκας (Σκύλος);animal lover;0.0;C:\Users\vivia\Downloads\Jacob rott (1).jpg
+axilleaskexagias@gmail.com;axilleas1234;Pet Owner;Αχιλλεας;Κεχαγιας;21;Athens;Sherlock;animal lover;0.0;C:\Users\vivia\Downloads\λήψη (86).jpg
+axilleaskexagias2@gmail.com;axilleas1234;Pet Owner;Αχιλλέας;Κεχαγιάς;21;Athens;1;animal lover;0.0;C:\Users\vivia\Downloads\λήψη (86).jpg
+axkexagia@gmail.com;axkex1234;Pet Owner;Αχιλλέας;Κεχαγιάς;21;Athens;1;animal lover;0.0;C:\Users\vivia\Downloads\λήψη (86).jpg
+axkexagias@gmail.com;axkex1234;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+axax;axax;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: 3123231312) (Τηλ: 2432423423) (Τηλ: 688700780) (Τηλ: 3242343223);axax|axax|axax|axax|axax|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;animal lover;0.0;profileimage.jpg
+antepali@gmail.com;ante1234;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: 2113123131);;animal lover;0.0;profileimage.jpg
+axilleaskeaxagias2@gmail.com;axilleas1234;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+axkex@gmail.com;axkex1234;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+eleftheria@gmail.com;elef1234;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: 1312312321);eled|dwq|wdqw|dwqd|dqwfdq|Χαμηλό|Καθόλου|Καμία|Φιλική|qwdqwdqwdqwdqw|dqwd|qwdqw|Όχι|Ναι|Όχι|2|Ναι|Όχι|default_pet.png;animal lover;0.0;profileimage.jpg
+test@gmail.com;test1234;Dual;ΤΕΣΤ;ΤΕΣΤ;18;Athens | Διαμέρισμα (Χωρίς αυλή) [Φώτο: None];1;MaxPets: 1;0.0;profileimage.jpg
+test1;TEST1;Dual;NewUser;Lastname;18;Athens (Τηλ: 442423);F3WF1`|FW|FQW|`FQW|FWQ|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+test2;test2;Dual;NewUser;Lastname;18;Athens (Τηλ: 1231231);we|fw|fwq|fq|fw|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Ναι|default_pet.png;No preferences;0.0;profileimage.jpg
+test3;test3;Dual;NewUser;Lastname;18;Μονοκατοικία με κήπο (Χωρίς αυλή);313|r23`|rq|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png|313 είναι ένα υπέροχο Κατοικίδιο που καταχωρήθηκε επιτυχώς στην πλατφόρμα petbnb!;MaxPets: 1;0.0;profileimage.jpg
+test4;test4;Dual;NewUser;Lastname;18;Διαμέρισμα (Χωρίς αυλή);32423|r23|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;MaxPets: 2;0.0;profileimage.jpg
+test5;test5;Dual;NewUser;Lastname;18;Διαμέρισμα (Χωρίς αυλή);23432`|423432|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;animal lover;0.0;profileimage.jpg
+test6;test6;Dual;test6;test6;18;test;2;animal lover;0.0;profileimage.jpg
+er;er;Dual;NewUser;Lastname;18;Μονοκατοικία με κήπο (Χωρίς αυλή);1234|1234|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;animal lover;0.0;profileimage.jpg
+test7;test7;Dual;NewUser;Lastname;18;Μονοκατοικία με κήπο#Σκύλοι#Όχι#Μεταφορά;123|12312|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;animal lover;0.0;profileimage.jpg
+tes8;tes8;Dual;NewUser;Lastname;18;Μεζονέτα#Σκύλοι#Όχι#Μεταφορά;12|12|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;animal lover;0.0;profileimage.jpg
+qweq;qwewq;Dual;eqwe;qwe;qweq;qweq;qweq;animal lover;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\uni\IMG_3473.jpeg
+test12;test12;Dual;123;13214;3213;213;12;nemo lover;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1186.JPG
+vivi1;vivi1;Host;qwd;weqqwe;eqw;qwe;qw;cat person;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+vivi2;vivi2;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: 321);qw|eqw|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Ναι|Όχι|2|Όχι|Όχι|default_pet.png, 324|432|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Ναι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+vivi3;vivi3;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: ewrwe);ewr|erw|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png, ewr|ewr|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+vivi4;vivi4;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: 1234);1234|1234|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png, 5678|5678|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+vivi5;VIVI5;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: 1212412);13412|12312|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+54;3342;Dual;NewUser;Lastname;18;Διαμέρισμα#Άλλα ζώα#Όχι#Καμία extra παροχή;432423|324234|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;Καμία extra παροχή;0.0;profileimage.jpg
+vivi8;vivi8;Pet Owner;NewUser;Lastname;18;Athens (Τηλ: 123123123);123123|12312312|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+vvivivi;vwnoe;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+vivivi;vivivi;Pet Owner;NewUser;Lastname;18;Athens;334r34r|433434r34r|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+r23r213;3r3214;Pet Owner;fesdca;efwqfrw;18;refew;erf||||||||||||||||||default_pet.png|Sherlock είναι ένα υπέροχο Κατοικίδιο που καταχωρήθηκε επιτυχώς στην πλατφόρμα petbnb!;cat person;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+gw4gr3;543;Host;34g3g;g4353;18;4g3;No pets;cat person;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+32f4;32e3f2;Dual;NewUser;Lastname;18;Athens;3244|32fe|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+ωιιωιιωι;φςεξφ;Pet Owner;NewUser;Lastname;18;Athens;2#3####Χαμηλό#Χαμηλό#Όχι#Φιλικός####No#No#No#2#No#Yes#Δεν επιλέχθηκε αρχείο#322ε2##;No preferences;0.0;profileimage.jpg
+vewjinv;veqwnv;Pet Owner;NewUser;Lastname;18;Athens;vqewv|ewvr|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+γφμβπδ;φβγ;Pet Owner;ασδασ;δσαδασ;18;δασ;ςτρ|τρηρτη|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png|ςτρ είναι ένα υπέροχο Κατοικίδιο που καταχωρήθηκε επιτυχώς στην πλατφόρμα petbnb!;cat person;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+ugufuf;lobob;Host;np;;;18;Διαμέρισμα#Γάτες#Όχι#Καμία extra παροχή;No pets;nemo lover;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+bobo;npnp;Dual;[omp;npnn;18;Διαμέρισμα#Άλλα ζώα#Όχι#Καμία extra παροχή;fr8f8|np0iih|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png|fr8f8 είναι ένα υπέροχο Κατοικίδιο που καταχωρήθηκε επιτυχώς στην πλατφόρμα petbnb!;cat person;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1186.JPG
+npnp;npnp;Pet Owner;npnp;npnp;18;n ponp;npnp|onpnop|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png|nnklnklnlnlnlnknlnklkknlnlknl|mpmpo|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;nemo lover;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+ninob;onbobnoi;Host;nboboi;npnhoih;18;Διαμέρισμα#Πουλιά#Όχι#Καμία extra παροχή;No pets;cat person;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+vivibubug;bhbjbjbhjh;Pet Owner;nnkn;nkjnk;18;kjnkjbkj;2;cat person;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+vjvjvjvj; jjb jbj;Pet Owner;nknk;kn kjnkj;18;nkjnkj;nhoihoi|n;chef with a mouse in his hat;No preferences;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+bkjbk;kjbkj;Pet Owner;nkjnkj;mn m m;18;hniuhi;uihihiu|nknkn|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png|uihihiu είναι ένα υπέροχο Κατοικίδιο που καταχωρήθηκε επιτυχώς στην πλατφόρμα petbnb!;nemo lover;0.0;C:\Users\vivia\OneDrive\Desktop\φωτο\Random\IMG_1187.JPG
+rtyuhjkl;yuhgijkl;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+t5reihi;terwoigoe;Pet Owner;NewUser;Lastname;18;Athens;jfoeirjf|greokighoer|Άγνωστη ηλικία|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
+vivikatsanda@gmail.com;sedfd;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+erato@gmai.com;erato1;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+user@mail.com;SecurePass123!;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+user@Gmail.com;DASODHO1;Unassigned;NewUser;Lastname;18;Athens;No pets;No preferences;0.0;profileimage.jpg
+user1@mail.com;user1passwoed;Pet Owner;NewUser;Lastname;18;Athens;Σέρλοκ|Σκύλος|3|Μη ορισμένο|Μιξ / Άγνωστη|Χαμηλό|Καθόλου|Καμία|Φιλική|Κανένα|Κανονική|Καμία|Όχι|Όχι|Όχι|2|Όχι|Όχι|default_pet.png;No preferences;0.0;profileimage.jpg
